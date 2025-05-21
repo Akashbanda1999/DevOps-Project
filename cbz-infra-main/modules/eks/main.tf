@@ -93,9 +93,9 @@ resource "aws_eks_cluster" "cbz_cluster" {
 
   vpc_config {
     subnet_ids = [
-      data.aws_subnet.public_subnet_1a.id,
-      data.aws_subnet.public_subnet_1b.id,
-      data.aws_subnet.public_subnet_1c.id
+      data.aws_subnet.subnet_1a.id,
+      data.aws_subnet.subnet_1b.id,
+      data.aws_subnet.subnet_1c.id
     ]
   }
 
@@ -105,15 +105,14 @@ resource "aws_eks_cluster" "cbz_cluster" {
   ]
 }
 
-# EKS Node Group
 resource "aws_eks_node_group" "cbz_nodegroup" {
   cluster_name    = aws_eks_cluster.cbz_cluster.name
   node_group_name = "cbz-node-group"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = [
-    data.aws_subnet.public_subnet_1a.id,
-    data.aws_subnet.public_subnet_1b.id,
-    data.aws_subnet.public_subnet_1c.id
+    data.aws_subnet.subnet_1a.id,
+    data.aws_subnet.subnet_1b.id,
+    data.aws_subnet.subnet_1c.id
   ]
 
   scaling_config {
@@ -129,15 +128,4 @@ resource "aws_eks_node_group" "cbz_nodegroup" {
     aws_iam_role_policy_attachment.eks_cni_policy,
     aws_iam_role_policy_attachment.ec2_container_policy
   ]
-}
-
-# Output cluster endpoint and OIDC
-output "eks_cluster_endpoint" {
-  value       = aws_eks_cluster.cbz_cluster.endpoint
-  description = "EKS Cluster Endpoint"
-}
-
-output "kubeconfig_hint" {
-  value       = "Run this command: aws eks update-kubeconfig --name cbz-cluster"
-  description = "Kubeconfig setup command"
 }
