@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: com-backend-app
+  labels:
+    app: com-backend-app
+spec:
+  selector:
+    matchLabels:
+      app: com-backend-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: com-backend-app
+    spec:
+      containers:
+        - name: com-backend-app
+          image: dmirge/com-backend:latest 
+          ports:
+            - containerPort: 8080 
