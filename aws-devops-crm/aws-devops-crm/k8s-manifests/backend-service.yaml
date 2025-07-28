@@ -1,0 +1,13 @@
+# Kubernetes Service (k8s-manifests/backend-service.yaml)
+apiVersion: v1
+kind: Service
+metadata:
+  name: crm-backend-service
+spec:
+  selector:
+    app: crm-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP
