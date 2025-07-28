@@ -1,1 +1,31 @@
-pipeline { agent any stages { stage('Build Frontend') { steps { echo 'Build Frontend' } } } }
+# Jenkinsfile (jenkins/Jenkinsfile-frontend)
+pipeline {
+  agent any
+  environment {
+    S3_BUCKET = 'crm-frontend-bucket'
+    CLOUDFRONT_DIST_ID = 'YOUR_CLOUDFRONT_DIST_ID'
+  }
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/your-repo/frontend.git'
+      }
+    }
+    stage('Build') {
+      steps {
+        sh 'npm install'
+        sh 'npm run build'
+      }
+    }
+    stage('Deploy to S3') {
+      steps {
+        sh 'aws s3 sync build/ s3://$S3_BUCKET/'
+      }
+    }
+    stage('Invalidate CloudFront Cache') {
+      steps {
+        sh './scripts/cloudfront-invalidate.sh $CLOUDFRONT_DIST_ID'
+      }
+    }
+  }
+}
