@@ -1,0 +1,17 @@
+# Kubernetes Ingress (k8s-manifests/ingress.yaml)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: crm-ingress
+spec:
+  rules:
+  - host: crm.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: crm-backend-service
+            port:
+              number: 80
